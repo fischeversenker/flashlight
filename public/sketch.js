@@ -11,23 +11,6 @@ const PLAYER = {
   velocity: { x: 0, y: 0 },
 };
 
-const FIREFLY = {
-  radius: 15,
-  color: '#fff',
-  pos: { x: WIDTH / 4, y: HEIGHT * 0.8 },
-  velocity: { x: 0, y: 0 },
-};
-const FIREFLY_MAX_VELOCITY = 0.4;
-const FIREFLY_MAX_DEVIATION = 40;
-
-let FIREFLIES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => ({
-  ...FIREFLY,
-  pos: {
-    x: FIREFLY.pos.x + ((Math.random() - 1) * FIREFLY_MAX_DEVIATION),
-    y: FIREFLY.pos.y + ((Math.random() - 1) * FIREFLY_MAX_DEVIATION),
-  }
-}));
-
 const GHOST = {
   radius: 10,
   color: '#ffffff20',
@@ -48,6 +31,10 @@ function preload() {
 function setup() {
   canvas = createCanvas(WIDTH, HEIGHT);
   ctx = canvas.drawingContext;
+
+  fireflies = new FireflyManager({ drawShine: drawShine });
+  fireflies2 = new FireflyManager({ drawShine: drawShine });
+  fireflies3 = new FireflyManager({ drawShine: drawShine });
 
   const windowRatio = WIDTH / HEIGHT;
   const imgRatio = origImg.width / origImg.height;
@@ -83,7 +70,9 @@ function draw() {
   }
 
   if (true) {
-    drawFireFlies();
+    fireflies.update();
+    fireflies2.update();
+    fireflies3.update();
   }
 
   if (!removeTops) {
@@ -156,46 +145,6 @@ function drawGhost() {
   const incY = map(Math.random(), 0, 1, -GHOST_MAX_VELOCITY, GHOST_MAX_VELOCITY);
   GHOST.velocity.x += incX;
   GHOST.velocity.y += incY;
-}
-
-function drawFireFlies() {
-  FIREFLIES = FIREFLIES.map(firefly => {
-    const d = firefly.radius * 2;
-    const x = firefly.pos.x - firefly.radius;
-    const y = firefly.pos.y - firefly.radius;
-    drawShine(x, y, d);
-
-    const incX = map(Math.random(), 0, 1, -FIREFLY_MAX_VELOCITY, FIREFLY_MAX_VELOCITY);
-    const incY = map(Math.random(), 0, 1, -FIREFLY_MAX_VELOCITY, FIREFLY_MAX_VELOCITY);
-    firefly.velocity.x += incX;
-    firefly.velocity.y += incY;
-    return updateFirefly(firefly);
-  });
-}
-
-function updateFirefly(firefly) {
-  const updatedFirefly = { ...firefly };
-  updatedFirefly.pos.x += updatedFirefly.velocity.x;
-  updatedFirefly.pos.y += updatedFirefly.velocity.y;
-  updatedFirefly.velocity.x *= 0.9;
-  updatedFirefly.velocity.y *= 0.9;
-
-  if (updatedFirefly.pos.x + updatedFirefly.radius < -40) {
-    updatedFirefly.pos.x = WIDTH + updatedFirefly.radius;
-  }
-
-  if (updatedFirefly.pos.x - updatedFirefly.radius > WIDTH + 40) {
-    updatedFirefly.pos.x = 0 - updatedFirefly.radius;
-  }
-
-  if (updatedFirefly.pos.y - updatedFirefly.radius < -40) {
-    updatedFirefly.pos.y = HEIGHT + updatedFirefly.radius;
-  }
-
-  if (updatedFirefly.pos.y - updatedFirefly.radius > HEIGHT + 40) {
-    updatedFirefly.pos.y = 0;
-  }
-  return updatedFirefly;
 }
 
 function keyboard() {
