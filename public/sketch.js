@@ -10,6 +10,7 @@ const PLAYER = {
   pos: { x: 0, y: 0 },
   velocity: { x: 0, y: 0 },
 };
+const PLAYER_MAX_VELOCITY = 0.7;
 
 const GHOST = {
   radius: 10,
@@ -84,9 +85,9 @@ function draw() {
 
 function drawInfo() {
   fill(255, 255, 255, 100);
-  textSize(20);
-  text('controller (c): ' + (mouseControlled ? 'mouse' : 'keyoard'), 50, HEIGHT - 110);
-  text('remove tree tops (t): ' + removeTops, 50, HEIGHT - 80);
+  textSize(16);
+  text('controller (c): ' + (mouseControlled ? 'mouse' : 'keyoard'), 50, HEIGHT - 100);
+  text('remove tree tops (t): ' + removeTops, 50, HEIGHT - 75);
   text('show flashlight (f or p): ' + showPlayer, 50, HEIGHT - 50);
 }
 
@@ -155,16 +156,16 @@ function keyboard() {
   // check direction keys
   switch (keyCode) {
     case UP_ARROW:
-      PLAYER.velocity.y -= 5;
+      PLAYER.velocity.y -= PLAYER_MAX_VELOCITY;
       break;
     case LEFT_ARROW:
-      PLAYER.velocity.x -= 5;
+      PLAYER.velocity.x -= PLAYER_MAX_VELOCITY;
       break;
     case DOWN_ARROW:
-      PLAYER.velocity.y += 5;
+      PLAYER.velocity.y += PLAYER_MAX_VELOCITY;
       break;
     case RIGHT_ARROW:
-      PLAYER.velocity.x += 5;
+      PLAYER.velocity.x += PLAYER_MAX_VELOCITY;
       break;
   }
 }
