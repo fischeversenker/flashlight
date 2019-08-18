@@ -94,6 +94,8 @@ function drawInfo() {
   text('remove tree tops (t): ' + removeTops, 50, HEIGHT - 100);
   text('switch flashlight on/off (f): ' + showPlayer, 50, HEIGHT - 75);
   text('show/hide this info (i)', 50, HEIGHT - 50);
+
+  text('switch to labyrinth (1)', WIDTH - 220, HEIGHT - 50);
 }
 
 function drawPlayer() {
@@ -194,6 +196,9 @@ function keyPressed() {
       break;
     case "i":
       showInfo = !showInfo;
+      break;
+    case "1":
+      window.location.href = '/index.html';
       break;
   }
 }
