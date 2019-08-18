@@ -185,6 +185,7 @@ function keyPressed() {
       break;
     case "c":
       mouseControlled = !mouseControlled;
+      document.body.classList.toggle('show-cursor', !mouseControlled);
       break;
   }
 }
