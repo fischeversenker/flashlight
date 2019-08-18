@@ -79,12 +79,15 @@ function draw() {
 function drawInfo() {
   fill(255, 255, 255, 100);
   textSize(16);
+  textAlign(LEFT);
   text('controller (c): ' + (mouseControlled ? 'mouse' : 'keyoard'), 50, HEIGHT - 125);
   text('remove tree tops (t): ' + removeTops, 50, HEIGHT - 100);
   text('switch flashlight on/off (f): ' + showPlayer, 50, HEIGHT - 75);
   text('show/hide this info (i)', 50, HEIGHT - 50);
 
-  text('switch to forest (2)', WIDTH - 200, HEIGHT - 50);
+  textAlign(RIGHT);
+  text('switch to forest (2)', WIDTH - 50, HEIGHT - 75);
+  text('switch to city (3)', WIDTH - 50, HEIGHT - 50);
 }
 
 function drawPlayer() {
@@ -157,6 +160,9 @@ function keyPressed() {
       break;
     case "2":
       window.location.href = '/forest.html';
+      break;
+    case "3":
+      window.location.href = '/city1.html';
       break;
   }
 }
