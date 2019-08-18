@@ -1,6 +1,3 @@
-const WIDTH = window.innerWidth;
-const HEIGHT = window.innerHeight;
-
 let mouseControlled = true;
 let showPlayer = true;
 let removeTops = false;
@@ -23,28 +20,14 @@ function preload() {
 }
 
 function setup() {
-  canvas = createCanvas(WIDTH, HEIGHT);
+  canvas = createCanvas(windowWidth, windowHeight);
   ctx = canvas.drawingContext;
 
   fireflies = new FireflyManager({ drawShine: drawShine });
   fireflies2 = new FireflyManager({ drawShine: drawShine });
   fireflies3 = new FireflyManager({ drawShine: drawShine });
 
-  const windowRatio = WIDTH / HEIGHT;
-  const imgRatio = origImg.width / origImg.height;
-  if (windowRatio < imgRatio) {
-    origImg.resize(0, HEIGHT);
-    shineImg.resize(0, HEIGHT);
-
-    img.resize(0, HEIGHT);
-    imgMask.resize(0, HEIGHT);
-  } else {
-    origImg.resize(WIDTH, 0);
-    shineImg.resize(WIDTH, 0);
-
-    img.resize(WIDTH, 0);
-    imgMask.resize(WIDTH, 0);
-  }
+  resize();
 
   img.mask(imgMask);
 
@@ -80,15 +63,15 @@ function drawInfo() {
   fill(255, 255, 255, 100);
   textSize(16);
   textAlign(LEFT);
-  text('controller (c): ' + (mouseControlled ? 'mouse' : 'keyoard'), 50, HEIGHT - 175);
-  text('remove tree tops (t): ' + removeTops, 50, HEIGHT - 150);
-  text('switch flashlight on/off (f): ' + showPlayer, 50, HEIGHT - 125);
-  text('kiosk mode (fullscreen) (k)', 50, HEIGHT - 100);
-  text('show/hide this info (i)', 50, HEIGHT - 75);
+  text('controller (c): ' + (mouseControlled ? 'mouse' : 'keyoard'), 50, windowHeight - 175);
+  text('remove tree tops (t): ' + removeTops, 50, windowHeight - 150);
+  text('switch flashlight on/off (f): ' + showPlayer, 50, windowHeight - 125);
+  text('kiosk mode (fullscreen) (k)', 50, windowHeight - 100);
+  text('show/hide this info (i)', 50, windowHeight - 75);
 
   textAlign(RIGHT);
-  text('switch to forest (2)', WIDTH - 50, HEIGHT - 75);
-  text('switch to city (3)', WIDTH - 50, HEIGHT - 50);
+  text('switch to forest (2)', windowWidth - 50, windowHeight - 75);
+  text('switch to city (3)', windowWidth - 50, windowHeight - 50);
 }
 
 function drawPlayer() {
@@ -150,7 +133,7 @@ function keyPressed() {
       showPlayer = !showPlayer;
       break;
     case "k":
-      openFullscreen();
+      toggleFullscreen();
       break;
     case "t":
       removeTops = !removeTops;
@@ -169,4 +152,26 @@ function keyPressed() {
       window.location.href = '/city1.html';
       break;
   }
+}
+
+function resize() {
+  const windowRatio = windowWidth / windowHeight;
+  const imgRatio = origImg.width / origImg.height;
+  if (windowRatio < imgRatio) {
+    origImg.resize(0, windowHeight);
+    shineImg.resize(0, windowHeight);
+    img.resize(0, windowHeight);
+    imgMask.resize(0, windowHeight);
+  } else {
+    origImg.resize(windowWidth, 0);
+    shineImg.resize(windowWidth, 0);
+    img.resize(windowWidth, 0);
+    imgMask.resize(windowWidth, 0);
+  }
+  canvas = createCanvas(windowWidth, windowHeight);
+  ctx = canvas.drawingContext;
+}
+
+function windowResized() {
+  resize();
 }
