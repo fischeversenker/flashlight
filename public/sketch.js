@@ -6,11 +6,35 @@ let showPlayer = true;
 let removeTops = false;
 
 const PLAYER = {
-  radius: 150,
-  color: '#ffe89e',
+  radius: 100,
   pos: { x: 0, y: 0 },
   velocity: { x: 0, y: 0 },
 };
+
+const FIREFLY = {
+  radius: 15,
+  color: '#fff',
+  pos: { x: WIDTH / 4, y: HEIGHT * 0.8 },
+  velocity: { x: 0, y: 0 },
+};
+const FIREFLY_MAX_VELOCITY = 0.4;
+const FIREFLY_MAX_DEVIATION = 40;
+
+let FIREFLIES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => ({
+  ...FIREFLY,
+  pos: {
+    x: FIREFLY.pos.x + ((Math.random() - 1) * FIREFLY_MAX_DEVIATION),
+    y: FIREFLY.pos.y + ((Math.random() - 1) * FIREFLY_MAX_DEVIATION),
+  }
+}));
+
+const GHOST = {
+  radius: 10,
+  color: '#ffffff20',
+  pos: { x: 400, y: 400 },
+  velocity: { x: 0, y: 0 },
+};
+const GHOST_MAX_VELOCITY = 10;
 
 function preload() {
   origImg = loadImage('assets/forest.jpg');
@@ -48,21 +72,18 @@ function setup() {
 }
 
 function draw() {
-  if (!mouseControlled) {
-    keyboard();
-    PLAYER.pos.x += PLAYER.velocity.x;
-    PLAYER.pos.y += PLAYER.velocity.y;
-    PLAYER.velocity.x *= 0.9;
-    PLAYER.velocity.y *= 0.9;
-  } else {
-    PLAYER.pos.x = mouseX;
-    PLAYER.pos.y = mouseY;
-  }
-
   image(origImg, 0, 0);
 
   if (showPlayer) {
     drawPlayer();
+  }
+
+  if (false) {
+    drawGhost();
+  }
+
+  if (true) {
+    drawFireFlies();
   }
 
   if (!removeTops) {
@@ -81,14 +102,100 @@ function drawInfo() {
 }
 
 function drawPlayer() {
+  if (!mouseControlled) {
+    keyboard();
+    PLAYER.pos.x += PLAYER.velocity.x;
+    PLAYER.pos.y += PLAYER.velocity.y;
+    PLAYER.velocity.x *= 0.9;
+    PLAYER.velocity.y *= 0.9;
+  } else {
+    PLAYER.pos.x = mouseX;
+    PLAYER.pos.y = mouseY;
+  }
+
   const d = PLAYER.radius * 2;
   const x = PLAYER.pos.x - PLAYER.radius;
   const y = PLAYER.pos.y - PLAYER.radius;
 
+  drawShine(x, y, d);
+}
+
+function drawShine(x, y, d) {
   const shineImgMasked = createImage(d, d);
   shineImgMasked.copy(shineImg, x, y, d, d, 0, 0, d, d);
   shineImgMasked.mask(shineMask);
   image(shineImgMasked, x, y);
+}
+
+function drawGhost() {
+  GHOST.pos.x += GHOST.velocity.x;
+  GHOST.pos.y += GHOST.velocity.y;
+  GHOST.velocity.x *= 0.9;
+  GHOST.velocity.y *= 0.9;
+
+  if (GHOST.pos.x + GHOST.radius < 0) {
+    GHOST.pos.x = WIDTH + GHOST.radius;
+  }
+
+  if (GHOST.pos.x - GHOST.radius > WIDTH) {
+    GHOST.pos.x = 0 - GHOST.radius;
+  }
+
+  if (GHOST.pos.y - GHOST.radius < 0) {
+    GHOST.pos.y = HEIGHT + GHOST.radius;
+  }
+
+  if (GHOST.pos.y - GHOST.radius > HEIGHT) {
+    GHOST.pos.y = 0;
+  }
+
+  fill(GHOST.color);
+  circle(GHOST.pos.x, GHOST.pos.y, GHOST.radius * 2);
+
+  const incX = map(Math.random(), 0, 1, -GHOST_MAX_VELOCITY, GHOST_MAX_VELOCITY);
+  const incY = map(Math.random(), 0, 1, -GHOST_MAX_VELOCITY, GHOST_MAX_VELOCITY);
+  GHOST.velocity.x += incX;
+  GHOST.velocity.y += incY;
+}
+
+function drawFireFlies() {
+  FIREFLIES = FIREFLIES.map(firefly => {
+    const d = firefly.radius * 2;
+    const x = firefly.pos.x - firefly.radius;
+    const y = firefly.pos.y - firefly.radius;
+    drawShine(x, y, d);
+
+    const incX = map(Math.random(), 0, 1, -FIREFLY_MAX_VELOCITY, FIREFLY_MAX_VELOCITY);
+    const incY = map(Math.random(), 0, 1, -FIREFLY_MAX_VELOCITY, FIREFLY_MAX_VELOCITY);
+    firefly.velocity.x += incX;
+    firefly.velocity.y += incY;
+    return updateFirefly(firefly);
+  });
+}
+
+function updateFirefly(firefly) {
+  const updatedFirefly = { ...firefly };
+  updatedFirefly.pos.x += updatedFirefly.velocity.x;
+  updatedFirefly.pos.y += updatedFirefly.velocity.y;
+  updatedFirefly.velocity.x *= 0.9;
+  updatedFirefly.velocity.y *= 0.9;
+
+  if (updatedFirefly.pos.x + updatedFirefly.radius < -40) {
+    updatedFirefly.pos.x = WIDTH + updatedFirefly.radius;
+  }
+
+  if (updatedFirefly.pos.x - updatedFirefly.radius > WIDTH + 40) {
+    updatedFirefly.pos.x = 0 - updatedFirefly.radius;
+  }
+
+  if (updatedFirefly.pos.y - updatedFirefly.radius < -40) {
+    updatedFirefly.pos.y = HEIGHT + updatedFirefly.radius;
+  }
+
+  if (updatedFirefly.pos.y - updatedFirefly.radius > HEIGHT + 40) {
+    updatedFirefly.pos.y = 0;
+  }
+  return updatedFirefly;
 }
 
 function keyboard() {
