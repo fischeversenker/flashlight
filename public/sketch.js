@@ -13,21 +13,13 @@ const PLAYER = {
 };
 const PLAYER_MAX_VELOCITY = 0.7;
 
-const GHOST = {
-  radius: 10,
-  color: '#ffffff20',
-  pos: { x: 400, y: 400 },
-  velocity: { x: 0, y: 0 },
-};
-const GHOST_MAX_VELOCITY = 10;
-
 function preload() {
-  origImg = loadImage('assets/forest.jpg');
-  img = loadImage('assets/forest.jpg');
-  imgMask = loadImage('assets/forest-alpha4.png');
+  origImg = loadImage('assets/labyrinth/labyrinth.jpg');
+  img = loadImage('assets/labyrinth/labyrinth.jpg');
+  imgMask = loadImage('assets/labyrinth/labyrinth-alpha.png');
 
   shineMask = loadImage('assets/shine-alpha.png');
-  shineImg = loadImage('assets/forest-bright.jpg');
+  shineImg = loadImage('assets/labyrinth/labyrinth-bright.jpg');
 }
 
 function setup() {
@@ -61,14 +53,11 @@ function setup() {
 }
 
 function draw() {
+  background(100, 100, 100);
   image(origImg, 0, 0);
 
   if (showPlayer) {
     drawPlayer();
-  }
-
-  if (false) {
-    drawGhost();
   }
 
   if (true) {
@@ -120,37 +109,6 @@ function drawShine(x, y, d) {
   shineImgMasked.copy(shineImg, x, y, d, d, 0, 0, d, d);
   shineImgMasked.mask(shineMask);
   image(shineImgMasked, x, y);
-}
-
-function drawGhost() {
-  GHOST.pos.x += GHOST.velocity.x;
-  GHOST.pos.y += GHOST.velocity.y;
-  GHOST.velocity.x *= 0.9;
-  GHOST.velocity.y *= 0.9;
-
-  if (GHOST.pos.x + GHOST.radius < 0) {
-    GHOST.pos.x = WIDTH + GHOST.radius;
-  }
-
-  if (GHOST.pos.x - GHOST.radius > WIDTH) {
-    GHOST.pos.x = 0 - GHOST.radius;
-  }
-
-  if (GHOST.pos.y - GHOST.radius < 0) {
-    GHOST.pos.y = HEIGHT + GHOST.radius;
-  }
-
-  if (GHOST.pos.y - GHOST.radius > HEIGHT) {
-    GHOST.pos.y = 0;
-  }
-
-  fill(GHOST.color);
-  circle(GHOST.pos.x, GHOST.pos.y, GHOST.radius * 2);
-
-  const incX = map(Math.random(), 0, 1, -GHOST_MAX_VELOCITY, GHOST_MAX_VELOCITY);
-  const incY = map(Math.random(), 0, 1, -GHOST_MAX_VELOCITY, GHOST_MAX_VELOCITY);
-  GHOST.velocity.x += incX;
-  GHOST.velocity.y += incY;
 }
 
 function keyboard() {
