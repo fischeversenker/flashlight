@@ -4,6 +4,7 @@ const HEIGHT = window.innerHeight;
 let mouseControlled = true;
 let showPlayer = true;
 let removeTops = false;
+let showInfo = true;
 
 const PLAYER = {
   radius: 100,
@@ -80,15 +81,19 @@ function draw() {
     image(img, 0, 0);
   }
 
-  drawInfo();
+  if (showInfo) {
+    drawInfo();
+  }
+
 }
 
 function drawInfo() {
   fill(255, 255, 255, 100);
   textSize(16);
-  text('controller (c): ' + (mouseControlled ? 'mouse' : 'keyoard'), 50, HEIGHT - 100);
-  text('remove tree tops (t): ' + removeTops, 50, HEIGHT - 75);
-  text('show flashlight (f or p): ' + showPlayer, 50, HEIGHT - 50);
+  text('controller (c): ' + (mouseControlled ? 'mouse' : 'keyoard'), 50, HEIGHT - 125);
+  text('remove tree tops (t): ' + removeTops, 50, HEIGHT - 100);
+  text('switch flashlight on/off (f): ' + showPlayer, 50, HEIGHT - 75);
+  text('show/hide this info (i)', 50, HEIGHT - 50);
 }
 
 function drawPlayer() {
@@ -177,7 +182,6 @@ function keyPressed() {
       PLAYER.pos = { x: 0, y: 0 };
       PLAYER.velocity = { x: 0, y: 0 };
       break;
-    case "p":
     case "f":
       showPlayer = !showPlayer;
       break;
@@ -187,6 +191,9 @@ function keyPressed() {
     case "c":
       mouseControlled = !mouseControlled;
       document.body.classList.toggle('show-cursor', !mouseControlled);
+      break;
+    case "i":
+      showInfo = !showInfo;
       break;
   }
 }
