@@ -7,7 +7,7 @@ let removeTops = false;
 let showInfo = true;
 
 const PLAYER = {
-  radius: 100,
+  radius: 80,
   pos: { x: 0, y: 0 },
   velocity: { x: 0, y: 0 },
 };
@@ -23,11 +23,11 @@ const GHOST_MAX_VELOCITY = 10;
 
 function preload() {
   origImg = loadImage('assets/forest/forest.jpg');
-  img = loadImage('assets/forest/forest.jpg');
+  img = loadImage('assets/forest/forest3.jpg');
   imgMask = loadImage('assets/forest/forest-alpha4.png');
 
   shineMask = loadImage('assets/shine-alpha.png');
-  shineImg = loadImage('assets/forest/forest-bright.jpg');
+  shineImg = loadImage('assets/forest/forest-bright3.jpg');
 }
 
 function setup() {
@@ -90,12 +90,15 @@ function draw() {
 function drawInfo() {
   fill(255, 255, 255, 100);
   textSize(16);
+  textAlign(LEFT);
   text('controller (c): ' + (mouseControlled ? 'mouse' : 'keyoard'), 50, HEIGHT - 125);
   text('remove tree tops (t): ' + removeTops, 50, HEIGHT - 100);
   text('switch flashlight on/off (f): ' + showPlayer, 50, HEIGHT - 75);
   text('show/hide this info (i)', 50, HEIGHT - 50);
 
-  text('switch to labyrinth (1)', WIDTH - 220, HEIGHT - 50);
+  textAlign(RIGHT);
+  text('switch to labyrinth (1)', WIDTH - 50, HEIGHT - 75);
+  text('switch to city (3)', WIDTH - 50, HEIGHT - 50);
 }
 
 function drawPlayer() {
@@ -198,7 +201,10 @@ function keyPressed() {
       showInfo = !showInfo;
       break;
     case "1":
-      window.location.href = '/index.html';
+      window.location.href = '/labyrinth.html';
+      break;
+    case "3":
+      window.location.href = '/city1.html';
       break;
   }
 }
