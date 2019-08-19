@@ -1,31 +1,45 @@
 const BASE_FIREFLY = {
-  radius: 15,
+  radius: 4,
   color: '#fff',
 };
 const FIREFLY_MAX_VELOCITY = 0.4;
 const FIREFLY_MAX_DEVIATION = 140;
 
+const FIREFLY_SWARM_HEAD_COUNT = 13;
+
 class FireflyManager {
   shineInstance = null;
+  swarms = [];
 
-  constructor(shineInstance) {
+  constructor(shineInstance, swarmCount = 1) {
     this.shineInstance = shineInstance;
-    const spawnRandX = (200 + windowWidth / 4 * Math.random());
-    const spawnRandY = (windowHeight * 0.8 * Math.random());
-    this.fireflies = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map(() => {
-      const x = spawnRandX + ((Math.random() - 1) * FIREFLY_MAX_DEVIATION);
-      const y = spawnRandY + ((Math.random() - 1) * FIREFLY_MAX_DEVIATION);
+    let x, y, spawnRandX, spawnRandY;
 
-      return {
-        ...BASE_FIREFLY,
-        pos: { x, y },
-        velocity: { x: 0, y: 0 },
-      };
-    });
+    for (let i = 0; i < max(0, swarmCount); i++) {
+      const swarm = [];
+
+      spawnRandX = (windowWidth * Math.random());
+      spawnRandY = (windowHeight * Math.random());
+
+      for (let k = 0; k < FIREFLY_SWARM_HEAD_COUNT; k++) {
+        x = spawnRandX + ((Math.random() - 1) * FIREFLY_MAX_DEVIATION);
+        y = spawnRandY + ((Math.random() - 1) * FIREFLY_MAX_DEVIATION);
+        swarm.push({
+          ...BASE_FIREFLY,
+          pos: { x, y },
+          velocity: { x: 0, y: 0 },
+        });
+      }
+      this.swarms.push(swarm);
+    }
   }
 
   update() {
-    this.fireflies = this.fireflies.map(firefly => {
+    this.swarms = this.swarms.map(swarm => this.updateSwarm(swarm));
+  }
+
+  updateSwarm(swarm) {
+    return swarm.map(firefly => {
       const d = firefly.radius * 2;
       const x = firefly.pos.x - firefly.radius;
       const y = firefly.pos.y - firefly.radius;
