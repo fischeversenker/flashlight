@@ -4,7 +4,7 @@ MASK_IMG_SRC = 'assets/forest/forest-alpha4.png'
 SHINE_IMG_SRC = 'assets/forest/forest-bright3.jpg'
 
 PLAYER = {
-  radius: 80,
+  radius: 60,
   maxVelocity: 0.7,
 };
 
