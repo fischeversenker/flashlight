@@ -4,7 +4,7 @@ MASK_IMG_SRC = 'assets/city1/city-alpha.png';
 SHINE_IMG_SRC = 'assets/city1/city-bright.jpg';
 
 PLAYER = {
-  radius: 40,
+  radius: 42,
   maxVelocity: 0.7,
 };
 
