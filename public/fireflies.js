@@ -2,6 +2,10 @@ const BASE_FIREFLY = {
   radius: 4,
   color: '#fff',
 };
+const DEFAULT_FIREFLY_CONFIG = {
+  radius: 4,
+  swarms: 3,
+};
 const FIREFLY_MAX_VELOCITY = 0.4;
 const FIREFLY_MAX_DEVIATION = 140;
 
@@ -11,11 +15,16 @@ class FireflyManager {
   shineInstance = null;
   swarms = [];
 
-  constructor(shineInstance, swarmCount = 1) {
+  constructor(shineInstance, config) {
     this.shineInstance = shineInstance;
     let x, y, spawnRandX, spawnRandY;
 
-    for (let i = 0; i < max(0, swarmCount); i++) {
+    config = {
+      ...DEFAULT_FIREFLY_CONFIG,
+      ...config,
+    };
+
+    for (let i = 0; i < max(0, config.swarms); i++) {
       const swarm = [];
 
       spawnRandX = (windowWidth * Math.random());
@@ -26,6 +35,7 @@ class FireflyManager {
         y = spawnRandY + ((Math.random() - 1) * FIREFLY_MAX_DEVIATION);
         swarm.push({
           ...BASE_FIREFLY,
+          radius: config.radius,
           pos: { x, y },
           velocity: { x: 0, y: 0 },
         });

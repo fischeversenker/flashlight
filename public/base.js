@@ -61,7 +61,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
 
   if (Config.fireflies) {
-    fireflies = new FireflyManager({ drawShine }, Config.fireflySwarmCount);
+    fireflies = new FireflyManager({ drawShine }, Config.fireflyConfig);
   }
 
   resizeImages();

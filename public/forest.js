@@ -10,5 +10,8 @@ PLAYER = {
 
 CONFIG = {
   fireflies: true,
-  fireflySwarmCount: 7,
+  fireflyConfig: {
+    radius: 3,
+    swarms: 7,
+  },
 };
